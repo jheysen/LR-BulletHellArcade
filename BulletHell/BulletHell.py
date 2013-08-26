@@ -8,6 +8,6 @@ def fib(n):
         print a,
         a,b = b,a+b
 
-num = int(raw_input('Introduzca un número: '))
+num = int(raw_input('Introduzca un numero: '))
 fib(num)
 print('')
