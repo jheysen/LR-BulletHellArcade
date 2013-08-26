@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e7a3f24e-bdc6-4a1a-8595-d4d3d80a65b1</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>BulletHell.py</StartupFile>
+    <StartupFile>test_pygame.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

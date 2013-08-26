@@ -12,6 +12,7 @@
 import pygame
 from pygame.locals import *
 import sys
+import os
  
 # -----------
 # Constantes
@@ -52,8 +53,10 @@ def load_sound(nombre, dir_sonido):
     return sonido
 
 class bala(pygame.sprite.Sprite):
+    "Balas"
     def __init__(self,dmg,spdx,spdy):
         pygame.sprite.Sprite.__init__(self)
+        print ("Bala creada")
         self.image = load_image("bala.png",IMG_DIR,True)
         self.rect = self.image.get_rect()
         self.speed = [spdx,spdy]
@@ -67,9 +70,10 @@ class bala(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.centerx += self.speed[0]
-        self.rect.centery += self.speed[1]
+        self.rect.centery -= self.speed[1]
 
 class jugador(pygame.sprite.Sprite):
+    "Jugador"
     def __init__(self, *groups):
         return super(jugador, self).__init__(*groups)
 
@@ -80,6 +84,8 @@ class jugador(pygame.sprite.Sprite):
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
         self.speed = [0,0]
+        self.rect.centerx = SCREEN_WIDTH /2
+        self.rect.centery = SCREEN_HEIGHT - 20
 
 class jefe(pygame.sprite.Sprite):
     "Jefe y comportamiento"
@@ -91,10 +97,13 @@ class jefe(pygame.sprite.Sprite):
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
         self.speed = [0,0]
+        self.rect.centerx = SCREEN_WIDTH/2
+        self.rect.centery = 100
+        self.tickcount = 0
 
     def tick(self):
         "IA del jefe"
-        return None
+        self.tickcount += 1
 
  
  
@@ -109,7 +118,7 @@ def main():
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("BulletHell POC")
-    fondo = load_image("fondo.png",IMG_DIR,True)
+    fondo = load_image("0.jpg",IMG_DIR,False)
 
     #creo contenedores globales
     balas = []
@@ -124,6 +133,8 @@ def main():
     while True:
         clock.tick(60)
 
+        boss.tick()
+
         #Analísis de colisiones
         for b in balas[:]:
             b.colision(player)
@@ -133,21 +144,32 @@ def main():
         for b in balas[:]:
             b.update()
 
+        #condiciones de fin
+        if boss.hp <= 0:
+            sys.exit()
+        elif player.hp <= 0:
+            sys.exit()
+
         # Posibles entradas del teclado y mouse
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.K_DOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == K_UP:
-                    player.rect.centery +=5
-                elif event.key == K_DOWN:
                     player.rect.centery -=5
+                elif event.key == K_DOWN:
+                    player.rect.centery +=5
                 elif event.key == K_LEFT:
                     player.rect.centerx -= 5
                 elif event.key == K_RIGHT:
                     player.rect.centerx += 5
                 elif event.key == K_SPACE:
-                    balas.append(bala(1,player.rect.centerx,player.rect.centery+10))
+                    print ("Creando bala")
+                    bb = bala(1,0,2)
+                    bb.rect.centerx = player.rect.centerx
+                    bb.rect.centery = player.rect.centery - 50
+                    balas.append(bb)
+                    #balas.append(bala(1,0,2))
                 elif event.key == K_ESCAPE:
                     sys.exit(0)
 
@@ -156,7 +178,8 @@ def main():
         screen.blit(player.image,player.rect)
         screen.blit(boss.image,boss.rect)
         for b in balas:
-            screen.blit(bala.image,bala.rect)
+            screen.blit(b.image,b.rect)
+        pygame.display.flip()
  
  
 if __name__ == "__main__":
