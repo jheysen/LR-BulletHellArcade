@@ -30,5 +30,23 @@
   <ItemGroup>
     <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\2.7" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="imagenes\" />
+    <Folder Include="sonidos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="imagenes\0.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="imagenes\bala.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="imagenes\jefe.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="imagenes\nave.png">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>
